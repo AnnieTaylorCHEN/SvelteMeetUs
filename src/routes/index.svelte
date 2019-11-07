@@ -8,17 +8,17 @@
         return res.json();
       })
       .then(data => {
-        const loadedMeetups = [];
+        const fetchedMeetups = [];
         for (const key in data) {
-          loadedMeetups.push({
+          fetchedMeetups.push({
             ...data[key],
             id: key
           });
         }
-        return { fetchedMeetups: loadedMeetups.reverse() };
+        return { fetchedMeetups: fetchedMeetups.reverse() };
         // setTimeout(() => {
         //   isLoading = false;
-        //   meetups.setMeetups(loadedMeetups.reverse());
+        //   meetups.setMeetups(fetchedMeetups.reverse());
         // }, 1000);
       })
       .catch(err => {
@@ -43,7 +43,6 @@
 
   export let fetchedMeetups;
 
-  let loadedMeetups = [];
   let editMode;
   let editedId;
   let isLoading;
@@ -54,14 +53,14 @@
   let favsOnly = false;
 
   $: filteredMeetups = favsOnly
-    ? loadedMeetups.filter(m => m.isFavorite)
-    : loadedMeetups;
+    ? fetchedMeetups.filter(m => m.isFavorite)
+    : fetchedMeetups;
 
   onMount(() => {
-    unsubscribe = meetups.subscribe(items => {
-      loadedMeetups = items;
-    });
     meetups.setMeetups(fetchedMeetups);
+    unsubscribe = meetups.subscribe(items => {
+      fetchedMeetups = items;
+    });
   });
 
   onDestroy(() => {
